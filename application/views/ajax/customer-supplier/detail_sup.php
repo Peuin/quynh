@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div class="main-space customer"></div>
+<div class="main-space orders-space"></div>
 
 <div class="supplier-info col-md-12">
     <?php if (isset($_list_sup) && count($_list_sup)) : ?>
@@ -188,7 +188,55 @@
     endif;
     ?>
 </div>
-<div><h2 id="input_info"></h2>
+<div class="col-md-12 padd-0">
+    <div class="col-md-6 padd-0">
+        <div class="left-action text-left clearfix padd-0">
+            <h3 id="input_info" class="padd-0 no-margin" style="margin-top: 10px;"></h3>
+        </div>
+    </div>
+    <div class="col-md-6 padd-0">
+        <div class="col-sm-12 padd-0 payment_debt_hide" id="payment_input">
+            <div class="col-sm-4 padd-0 line-height34">
+                <input type="radio" class="payment-method" name="payment-method" value="1"
+                       checked="">
+                Tiền mặt &nbsp;
+                <input type="radio" class="payment-method" name="payment-method" value="2">
+                Thẻ&nbsp;
+                <input type="radio" class="payment-method" name="payment-method" value="3">
+                CK
+            </div>
+            <div class="col-md-3 padd-0">
+                <input id="payment_note" class="form-control" type="text"
+                       placeholder="Ghi chú"
+                       style="border-radius: 0 !important;">
+            </div>
+            <div class="col-md-3 padd-0">
+                <input id="payment_date" class="form-control datepk" type="text"
+                       placeholder="Ngày chi"
+                       style="border-radius: 0 !important;">
+            </div>
+            <script>$('#payment_date').datetimepicker({
+                    autoclose: true
+                });
+            </script>
+            <div class="col-md-2 padd-0">
+                <div class="col-md-12" style="padding: 0px;display: inline-flex">
+                    <button type="button" class="btn" title="Hủy" onclick="cms_paging_input_by_supplier_id(1);">
+                        <i class="fa fa-times"
+                           style="color: white !important;"></i>
+                        Hủy
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="right-action text-right">
+            <div class="btn-groups">
+                <button type="button" class="btn btn-primary" id="payment_debt_show" onclick="cms_paging_input_debt_by_supplier_id(1)"><i
+                        class="fa fa-pencil-square-o"></i> Chi nợ
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="inputs-main-body">
 </div>

@@ -21,7 +21,7 @@
                     <h3 class="infobox-title blue"
                         style="font-size: 25px;"><?php echo cms_encode_currency_format((isset($total_orders['total_discount']) ? $total_orders['total_discount'] : 0)); ?></h3>
                     <span class="infobox-data-number text-center"
-                          style="font-size: 14px; color: #555;">Chiếc khấu</span>
+                          style="font-size: 14px; color: #555;">Chiết khấu</span>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
         <th></th>
         <th class="text-center">Tên NV bán hàng</th>
         <th class="text-center">Tổng số đơn</th>
-        <th class="text-center">Tổng chiếc khấu</th>
+        <th class="text-center">Tổng chiết khấu</th>
         <th class="text-center">Tổng tiền</th>
         <th class="text-center">Tổng SP</th>
         <th class="text-center">Tổng nợ</th>
@@ -110,7 +110,7 @@
                                         <th class="text-center">Ngày bán</th>
                                         <th class="text-center">Thu ngân</th>
                                         <th class="text-center ">Số lượng</th>
-                                        <th class="text-center ">Chiếc khấu</th>
+                                        <th class="text-center ">Chiết khấu</th>
                                         <th class="text-center ">Tổng tiền</th>
                                         <th class="text-center ">Nợ</th>
                                     </tr>

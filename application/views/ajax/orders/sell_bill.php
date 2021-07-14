@@ -9,18 +9,20 @@
             <div class="col-md-6">
                 <div class="right-action text-right">
                     <div class="btn-groups">
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(0)">
-                            <i class="fa fa-floppy-o"></i> Lưu tạm
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(0)">
+                            <i class="fa fa-floppy-o"></i> Khởi tạo
                         </button>
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(1)"><i
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(1)"><i
                                 class="fa fa-check"></i> Lưu
                         </button>
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(2)"><i class="fa fa-print"></i> Lưu và in
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(2)"><i
+                                class="fa fa-print"></i> Lưu và in
                         </button>
-                        <a href="/orders">
-                            <button type="button" class="btn-back btn btn-default"><i class="fa fa-arrow-left"></i> Hủy
-                            </button>
-                        </a>
+                        <button type="button" class="btn-back btn btn-default"
+                                onclick="cms_javascript_redirect( cms_javascrip_fullURL() )"><i
+                                class="fa fa-arrow-left"></i> Hủy
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -37,34 +39,34 @@
                 <input type="text" class="form-control" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm"
                        id="search-pro-box">
             </div>
-<script>
-    $(function () {
-        $("#search-pro-box").autocomplete({
-            minLength: 1,
-            source: 'orders/cms_autocomplete_products/',
-            focus: function (event, ui) {
-                $("#search-pro-box").val(ui.item.prd_code);
-                return false;
-            },
-            select: function (event, ui) {
-                cms_select_product_sell(ui.item.ID);
-                $("#search-pro-box").val('');
-                return false;
-            }
-        }).keyup(function (e) {
-            if(e.which === 13) {
-                cms_autocomplete_enter_sell();
-                $("#search-pro-box").val('');
-                $(".ui-menu-item").hide();
-            }
-        })
-            .autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>")
-                .append("<div>" + item.prd_code + " - " + item.prd_name + "</div>")
-                .appendTo(ul);
-        };
-    });
-</script>
+            <script>
+                $(function () {
+                    $("#search-pro-box").autocomplete({
+                        minLength: 1,
+                        source: 'orders/cms_autocomplete_products/',
+                        focus: function (event, ui) {
+                            $("#search-pro-box").val(ui.item.prd_code);
+                            return false;
+                        },
+                        select: function (event, ui) {
+                            cms_select_product_sell(ui.item.ID);
+                            $("#search-pro-box").val('');
+                            return false;
+                        }
+                    }).keyup(function (e) {
+                        if (e.which === 13) {
+                            cms_autocomplete_enter_sell();
+                            $("#search-pro-box").val('');
+                            $(".ui-menu-item").hide();
+                        }
+                    })
+                        .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                            .append("<div>" + item.prd_code + " - " + item.prd_name + "</div>")
+                            .appendTo(ul);
+                    };
+                });
+            </script>
             <div class="product-results">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -72,7 +74,9 @@
                         <th class="text-center">STT</th>
                         <th>Mã hàng</th>
                         <th>Tên sản phẩm</th>
+                        <th>Hình ảnh</th>
                         <th class="text-center">Số lượng</th>
+                        <th class="text-center">ĐVT</th>
                         <th class="text-center">Giá bán</th>
                         <th class="text-center">Thành tiền</th>
                         <th></th>
@@ -92,7 +96,7 @@
                     <div class="morder-info" style="padding: 4px;">
                         <div class="tab-contents" style="padding: 8px 6px;">
                             <div class="form-group marg-bot-10 clearfix">
-                                <div style="padding:0px" class="col-md-4">
+                                <div class="col-md-4 padd-0">
                                     <label>Khách hàng</label>
                                 </div>
                                 <div class="col-md-8">
@@ -118,39 +122,40 @@
                                 </div>
                             </div>
                             <div class="form-group marg-bot-10 clearfix">
-                                <div style="padding:0px" class="col-md-4">
+                                <div class="col-md-4 padd-0">
                                     <label>Ngày bán</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input id="date-order" class="form-control datepk" type="text" placeholder="Hôm nay"
                                            style="border-radius: 0 !important;">
                                 </div>
-                            <script>$('#date-order').datetimepicker({
-                                    autoclose: true
-                                });
-                            </script>
+                                <script>$('#date-order').datetimepicker({
+                                        autoclose: true
+                                    });
+                                </script>
                             </div>
                             <div class="form-group marg-bot-10 clearfix">
-                                <div style="padding:0px" class="col-md-4">
+                                <div class="col-md-4 padd-0">
                                     <label>NV bán hàng</label>
                                 </div>
                                 <div class="col-md-8">
                                     <select class="form-control" id="sale_id">
                                         <option value="">--Chọn--</option>
-                                        <?php foreach ($data as $item) { ?>
-                                            <option
+                                        <?php foreach ($data['sale'] as $item) { ?>
+                                            <option <?php if($data['user']['id']==$item['id']) echo 'selected' ?>
                                                 value="<?php echo $item['id']; ?>"><?php echo $item['display_name']; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group marg-bot-10 clearfix">
-                                <div style="padding:0px" class="col-md-4">
+                                <div class="col-md-4 padd-0">
                                     <label>Ghi chú</label>
                                 </div>
                                 <div class="col-md-8">
                                     <textarea id="note-order" cols="" class="form-control" rows="3"
-                                              style="border-radius: 0;"></textarea>
+                                              style="border-radius: 0;">
+                                    </textarea>
                                 </div>
                             </div>
                         </div>
@@ -172,9 +177,26 @@
                                     <div class="input-group">
                                         <input type="radio" class="payment-method" name="method-pay" value="1" checked>
                                         Tiền mặt &nbsp;
-                                        <input type="radio" class="payment-method" name="method-pay" value="2"> Thẻ&nbsp;
+                                        <input type="radio" class="payment-method" name="method-pay" value="2">
+                                        Thẻ&nbsp;
+                                        <input type="radio" class="payment-method" name="method-pay" value="3">
+                                        CK&nbsp;
                                     </div>
 
+                                </div>
+                            </div>
+                            <div class="form-group marg-bot-10 clearfix">
+                                <div class="col-md-4">
+                                    <label>VAT</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="vat">
+                                        <?php $list = cms_getListVAT();
+                                        foreach ($list as $key=>$val) { ?>
+                                            <option
+                                                value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group marg-bot-10 clearfix">
@@ -191,10 +213,15 @@
                                 <div class="col-md-4">
                                     <label>Giảm giá</label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input type="text"
-                                           class="form-control text-right txtMoney discount-order"
-                                           placeholder="0" style="border-radius: 0 !important;">
+                                <div class="col-md-8" style="display: flex;">
+                                                            <button onclick="cms_change_discount_order()" class="toggle-discount-order">vnđ</button>
+                                                            <button onclick="cms_change_discount_order()" style="display: none;" class="toggle-discount-order">%</button>
+                                                            <input type="text"
+                                                                   class="toggle-discount-order form-control text-right discount-percent-order"
+                                                                   placeholder="0" style="display:none;border-radius: 0 !important;">
+                                                            <input type="text"
+                                                                   class="toggle-discount-order form-control text-right txtMoney discount-order"
+                                                                   placeholder="0" style="border-radius: 0 !important;">
                                 </div>
                             </div>
                             <div class="form-group marg-bot-10 clearfix">
@@ -230,18 +257,19 @@
                 </div>
                 <div class="col-md-12">
                     <div class="btn-groups pull-right" style="margin-bottom: 50px;">
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(0)">
-                            <i class="fa fa-floppy-o"></i> Lưu tạm
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(0)">
+                            <i class="fa fa-floppy-o"></i> Khởi tạo
                         </button>
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(1)"><i
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(1)"><i
                                 class="fa fa-check"></i> Lưu
                         </button>
-                        <button type="button" class="btn btn-primary"  onclick="cms_save_orders(2)"><i class="fa fa-print"></i> Lưu và in
+                        <button type="button" class="btn btn-primary" onclick="cms_save_orders(2)"><i
+                                class="fa fa-print"></i> Lưu và in
                         </button>
-                        <a href="/orders">
-                            <button type="button" class="btn-back btn btn-default"><i class="fa fa-arrow-left"></i> Hủy
-                            </button>
-                        </a>
+                        <button type="button" class="btn-back btn btn-default"
+                                onclick="cms_javascript_redirect( cms_javascrip_fullURL() )"><i
+                                class="fa fa-arrow-left"></i> Hủy
+                        </button>
                     </div>
                 </div>
             </div>

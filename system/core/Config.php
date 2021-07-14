@@ -72,7 +72,7 @@ class CI_Config
                 $base_url .= '://' . $_SERVER['SERVER_ADDR'];
                 $base_url .= substr($_SERVER['SCRIPT_NAME'], 0, strpos($_SERVER['SCRIPT_NAME'], basename($_SERVER['SCRIPT_FILENAME'])));
             } else {
-                $base_url = 'http://localhost/';
+                $base_url = 'mysql://hjpt0qhmgqu0q26a:ovnkpgl653iw351y@d9c88q3e09w6fdb2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fd94usxu1qbyxpcj';
             }
 
             $this->set_item('base_url', $base_url);

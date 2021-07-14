@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="main-space customer"></div>
+    <div class="main-space orders-space"></div>
 
     <div class="products-content" style="margin-bottom: 25px;">
         <div class="basic-info">
@@ -40,12 +40,21 @@
                     <div class="col-md-8">
                         <div class="row">
                             <div class="form-group clearfix">
-                                <div class="col-md-6 padd-left-0">
+                                <div class="col-md-12 padd-left-0">
                                     <label>Tên sản phẩm</label>
                                     <input type="text" id="prd_name"
                                            value="<?php if (isset($data['_detail_product'])) echo $data['_detail_product']['prd_name'] ?>"
                                            class="form-control"
                                            placeholder="Nhập tên sản phẩm"/>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="col-md-6 padd-left-0">
+                                    <label>Số lượng</label>
+                                    <input disabled="disabled" type="text" id="prd_sls"
+                                           value="<?php if (isset($data['_detail_product'])) echo $data['_detail_product']['prd_sls'] ?>"
+                                           placeholder="0"
+                                           class="form-control text-right txtNumber"/>
                                 </div>
                                 <div class="col-md-6 padd-right-0">
                                     <label>Mã sản phẩm</label>
@@ -54,12 +63,41 @@
                                            placeholder="Nếu không nhập, hệ thống sẽ tự sinh."/>
                                 </div>
                             </div>
-
                             <div class="form-group clearfix">
                                 <div class="col-md-6 padd-left-0">
-                                    <label>Số lượng</label>
-                                    <input type="text" id="prd_sls" value="<?php if (isset($data['_detail_product'])) echo $data['_detail_product']['prd_sls'] ?>" placeholder="0"
-                                           class="form-control text-right txtNumber"/>
+                                    <label>Đơn vị tính</label>
+                                    <div class="col-md-11 padd-0">
+                                        <select class="form-control" id="prd_unit_id">
+                                            <optgroup label="Chọn đơn vị tính">
+                                                <?php $unit_id = 0;
+                                                if (isset($data['_detail_product']))
+                                                    $unit_id = $data['_detail_product']['prd_unit_id'];
+                                                echo $unit_id;
+                                                ?>
+                                                <?php if (isset($data['_prd_unit']) && count($data['_prd_unit'])):
+                                                    foreach ($data['_prd_unit'] as $key => $val) :
+                                                        ?>
+                                                        <option <?php if ($unit_id == $val['ID']) echo 'selected ' ?>
+                                                            value="<?php echo $val['ID']; ?>"><?php echo $val['prd_unit_name']; ?></option>
+                                                    <?php
+                                                    endforeach;
+                                                endif;
+                                                ?>
+                                            </optgroup>
+                                            <optgroup label="------------------------">
+                                                <option value="product_unit" data-toggle="modal"
+                                                        data-target="#list-prd-unit">Tạo mới
+                                                    Đơn vị tính
+                                                </option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1 padd-0">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#list-prd-unit"
+                                                style="border-radius: 0 3px 3px 0; box-shadow: none;">...
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 padd-right-0">
                                     <label class="checkbox" style="display: block;"><input type="checkbox"
@@ -78,7 +116,6 @@
                                         <span></span> Cho phép bán âm?</label>
                                 </div>
                             </div>
-
                             <div class="form-group clearfix">
                                 <div class="col-md-6 padd-left-0">
                                     <label>Giá vốn</label>
@@ -164,7 +201,33 @@
                                         </button>
                                     </div>
                                 </div>
-
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 padd-20">
+                                <div class="zoomin jumbotron text-center" id="img_upload"
+                                     style="border-radius: 0; margin-bottom: 10px; padding: 15px 20px;">
+                                    <img src="public/templates/uploads/<?php if (isset($data['_detail_product'])) echo $data['_detail_product']['prd_image_url'] ?>" height="200">
+                                    <h3>Upload hình ảnh sản phẩm</h3>
+                                    <small style="font-size: 14px; margin-bottom: 5px; display: inline-block;">(Để
+                                        tải và hiện thị nhanh, mỗi ảnh lên có dung lượng 500KB. Tải tối đa 10MB.)
+                                    </small>
+                                    <p>
+                                    <center>
+                                        <div id='img_preview' style="display: none;"></div>
+                                        <form id="image_upload_form" method="post" enctype="multipart/form-data"
+                                              action='product/upload_img' autocomplete="off">
+                                            <div class="file_input_container">
+                                                <div class="upload_button"><input type="file" name="photo" id="photo"
+                                                                                  class="file_input"/></div>
+                                            </div>
+                                            <br clear="all">
+                                        </form>
+                                    </center>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,26 +248,26 @@
                 <div class="col-md-12">
                     <div style="margin-top: 5px;"></div>
                     <div class="collapse" id="collapseproductinfo">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12 padd-20">
-                                    <div class="jumbotron text-center" id="img_upload"
-                                         style="border-radius: 0; margin-bottom: 10px; padding: 15px 20px;">
-                                        <h3>Upload hình ảnh sản phẩm</h3>
-                                        <small style="font-size: 14px; margin-bottom: 5px; display: inline-block;">(Để
-                                            tải và hiện thị nhanh, mỗi ảnh lên có dung lượng 500KB. Tải tối đa 10MB.)
-                                        </small>
-                                        <p>
-                                            <button class="btn" style="background-color: #337ab7; "
-                                                    onclick="browseKCFinder('img_upload','image');return false;"><i
-                                                    class="fa fa-picture-o" style="font-size: 40px;color: #fff; "></i>
-                                            </button>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+<!--                        <div class="col-md-12">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-12 padd-20">-->
+<!--                                    <div class="jumbotron text-center" id="img_upload"-->
+<!--                                         style="border-radius: 0; margin-bottom: 10px; padding: 15px 20px;">-->
+<!--                                        <h3>Upload hình ảnh sản phẩm</h3>-->
+<!--                                        <small style="font-size: 14px; margin-bottom: 5px; display: inline-block;">(Để-->
+<!--                                            tải và hiện thị nhanh, mỗi ảnh lên có dung lượng 500KB. Tải tối đa 10MB.)-->
+<!--                                        </small>-->
+<!--                                        <p>-->
+<!--                                            <button class="btn" style="background-color: #337ab7; "-->
+<!--                                                    onclick="browseKCFinder('img_upload','image');return false;"><i-->
+<!--                                                    class="fa fa-picture-o" style="font-size: 40px;color: #fff; "></i>-->
+<!--                                            </button>-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!---->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="col-md-12 padd-20">
                             <h4 style="margin-top: 0;">Mô tả
                                 <small style="font-style: italic;">(Nhập thông tin mô tả chi tiết hơn để khách

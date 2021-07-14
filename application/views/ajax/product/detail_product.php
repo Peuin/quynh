@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div class="main-space customer"></div>
+<div class="main-space orders-space"></div>
 
 <div class="products-content" style="margin-bottom: 25px;">
     <div class="basic-info">
@@ -45,15 +45,9 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="form-group clearfix">
-                            <div class="col-md-6 padd-left-0">
+                            <div class="col-md-12 padd-left-0">
                                 <label>Tên sản phẩm</label>
-
                                 <div><?php echo $_detail_product['prd_name']; ?></div>
-                            </div>
-                            <div class="col-md-6 padd-right-0">
-                                <label>Mã sản phẩm</label>
-
-                                <div><?php echo $_detail_product['prd_code']; ?></div>
                             </div>
                         </div>
                         <div class="form-group clearfix">
@@ -61,7 +55,20 @@
                                 <label>Số lượng</label>
                                 <div><?php echo $_detail_product['prd_sls']; ?></div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 padd-right-0">
+                                <label>Mã sản phẩm</label>
+
+                                <div><?php echo $_detail_product['prd_code']; ?></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-6 padd-left-0">
+                                <label>Đơn vị tính</label>
+                                <div class="col-md-12 padd-0">
+                                    <div><?php echo (cms_getNameunitbyID($_detail_product['prd_unit_id']) == 'Chưa có') ? 'Chưa có Nhà sản xuất' : cms_getNameunitbyID($_detail_product['prd_unit_id']); ?></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 padd-right-0">
                                 <div style="padding-bottom: 5px; font-weight: 700; color: #9d9d9d; "><span>Theo dõi tồn kho :</span> <?php echo (isset($_detail_product['prd_inventory']) && ($_detail_product['prd_inventory'] == '1')) ? '<span class="yes">Có</span>' : '<span class="no">Không</span>'; ?>
                                 </div>
                                 <div style="padding-bottom: 5px; font-weight: 700; color: #9d9d9d; "><span>Cho phép bán âm :</span> <?php echo (isset($_detail_product['prd_allownegative']) && ($_detail_product['prd_allownegative'] == '1')) ? '<span class="yes">Có</span>' : '<span class="no">Không</span>'; ?>
@@ -95,16 +102,7 @@
                                     <div><?php echo (cms_getNamemanufacturebyID($_detail_product['prd_manufacture_id']) == 'Chưa có') ? 'Chưa có Nhà sản xuất' : cms_getNamemanufacturebyID($_detail_product['prd_manufacture_id']); ?></div>
                                 </div>
                             </div>
-
                         </div>
-                        <!--                            <div class="form-group clearfix">-->
-                        <!--                                <div class="col-md-6 padd-0">-->
-                        <!--                                    <label>Thuế VAT</label>-->
-                        <!---->
-                        <!--                                    <div>-->
-                        <?php //echo $_detail_product['prd_vat'] . '%'; ?><!--</div>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
                     </div>
                 </div>
             </div>

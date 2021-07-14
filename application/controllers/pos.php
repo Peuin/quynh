@@ -13,7 +13,7 @@ class Pos extends CI_Controller
 
     public function index()
     {
-        if ($this->auth == null)
+        if ($this->auth == null || !in_array(19, $this->auth['group_permission']))
             $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
 
         $data['seo']['title'] = "Phần mềm quản lý bán hàng";

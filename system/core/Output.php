@@ -389,6 +389,8 @@ class CI_Output
         if ($output == '') {
             $output =& $this->final_output;
         }
+        // Replace http => https
+		$output = preg_replace('/http:\/\/smartselling.quynhon.gov.vn/', 'https://smartselling.quynhon.gov.vn', $output);
 
         // --------------------------------------------------------------------
 

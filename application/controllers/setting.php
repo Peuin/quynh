@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 
-class setting extends CI_Controller
+class Setting extends CI_Controller
 {
     private $auth;
 
@@ -16,7 +16,7 @@ class setting extends CI_Controller
     /****************************************/
     public function index()
     {
-        if ($this->auth == null || !in_array(10, $this->auth['group_permission']))
+        if ($this->auth == null || !in_array(11, $this->auth['group_permission']))
             $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
 
         $data['seo']['title'] = "Phần mềm quản lý bán hàng";
@@ -60,15 +60,16 @@ class setting extends CI_Controller
        echo $this->message = $template['content'];
     }
 
-    public function cms_crstore($store_name)
+    public function cms_crstore()
     {
-        $count = $this->db->where('stock_name', $store_name)->from('stores')->count_all_results();
+        $store_name = $this->input->post('store_name');
+        $count = $this->db->where('store_name', $store_name)->from('stores')->count_all_results();
         if ($count == 0) {
-            $data = ['stock_name' => $store_name, 'user_init'=>$this->auth['id']];
+            $data = ['store_name' => $store_name, 'user_init'=>$this->auth['id']];
             $this->db->insert('stores', $data);
             echo $this->messages = '1';
         } else {
-            echo $this->messages = 'Nhóm Chức năng ' . $store_name . ' đã tồn tại trong hệ thống.Vui lòng tạo tên nhóm khác.';
+            echo $this->messages = 'Kho ' . $store_name . ' đã tồn tại trong hệ thống.Vui lòng tạo tên nhóm khác.';
         }
     }
 }

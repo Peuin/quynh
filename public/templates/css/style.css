@@ -39,6 +39,10 @@ a:active, a:hover {
     color: #D53F40;
 }
 
+.line-height34{
+    line-height: 34px;
+}
+
 .padd-0 {
     padding: 0;
 }
@@ -247,6 +251,10 @@ span.yes {
     margin-left: -7px;
 }
 
+.no-margin{
+    margin: 0 !important;
+}
+
 #navbar-container .caret {
     display: inline-block;
     width: 0px;
@@ -299,7 +307,7 @@ section.main div.sidebar.sidebar-fixed ul.nav.nav-list li {
     border-bottom: 1px solid #ccc;
     position: relative;
     margin-top: 0;
-    line-height: 30px;
+    /*line-height: 30px;*/
 }
 
 section.main div.sidebar.sidebar-fixed ul.nav.nav-list li a {
@@ -384,7 +392,7 @@ section.main div.main-content div.main-space.orders-space {
 section.main div.main-content div.panel-action {
     min-height: 50px;
     text-align: center;
-    background-color: #F2F4D7;
+    background-color: #ffffff;
     /*position: fixed;*/
     top: 50px;
     left: 0px;
@@ -409,9 +417,10 @@ section.main div.main-content div.panel-action div.left-action div.ck-group labe
     font-size: 14px;
 }
 
-section.main div.main-content div.panel-action div.right-action {
+section.main div.main-content div.right-action {
     line-height: 45px;
 }
+
 
 section.main div.main-content div.panel-action div.right-action button.btn {
     margin-right: 5px;
@@ -474,27 +483,31 @@ section.main div.main-content div.report .report-box .infobox-data span.infobox-
     display: inline-block;
 }
 
-section.main div.main-content div.report .box-green {
-    background-color: #9ABC32;
-}
-
-section.main div.main-content div.report .box-blue {
-    background-color: #6FB3E0;
+section.main div.main-content div.report {
     font-size: 16px;
     vertical-align: middle;
 }
 
-section.main div.main-content div.report .box-blue .infobox-data h3.infobox-title {
+.box-blue{
+    background-color: #6FB3E0;
+}
+
+.box-green {
+    background-color: #9ABC32;
+}
+
+.box-red{
+    background-color: #d53f40;
+}
+
+section.main div.main-content div.report .infobox-data h3.infobox-title {
     display: inline-block;
 }
 
-section.main div.main-content div.report .box-blue .infobox-data span.infobox-data-number {
+section.main div.main-content div.report .infobox-data span.infobox-data-number {
     font-size: 16px;
 }
 
-section.main div.main-content div.report .box-red {
-    background-color: #D53F40;
-}
 
 section.main div.main-content div.report .box-orange {
     background-color: #E8B110;
@@ -709,7 +722,7 @@ section.main div.main-content .customer-info label {
     font-size: 15px;
 }
 
-section.main div.main-content div.orders div.order-btn-calendar button {
+section.main div.main-content div.order-btn-calendar button {
     background-color: #fff;
     border: 1px solid #0B87C9;
 }
@@ -872,6 +885,7 @@ button, input, optgroup, select, textarea {
     padding-left: 10px;
 }
 
+
 .tr-hide{
     display: none;
 }
@@ -917,6 +931,7 @@ button, input, optgroup, select, textarea {
         display: none;
     }
     .panel-action{
+        min-height: 120px !important;
         background-color: white !important;
     }
 }
@@ -1049,4 +1064,15 @@ button, input, optgroup, select, textarea {
     width: 22px;
     height: 2px;
     border-radius: 1px;
+}
+
+.zoomin img {
+    height: 30px;
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -ms-transition: all 2s ease;
+    transition: all 2s ease;
+}
+.zoomin img:hover {
+    height: 300px;
 }

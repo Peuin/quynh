@@ -7,7 +7,8 @@
         <th class="text-center">Ngày bán</th>
         <th class="text-center">Thu ngân</th>
         <th class="text-center">Trạng thái</th>
-        <th class="text-center" style="background-color: #fff;">Tổng tiền</th>
+        <th class="text-center">Tổng tiền</th>
+        <th class="text-center">Khách đưa</th>
         <th class="text-center"><i class="fa fa-clock-o"></i> Nợ</th>
         <th></th>
         <th class="text-center"><label class="checkbox" style="margin: 0;"><input type="checkbox"
@@ -40,6 +41,7 @@
                 <td class="text-center"><?php echo cms_getNameAuthbyID($item['user_init']); ?></td>
                 <td class="text-center"><?php echo cms_getNamestatusbyID($item['order_status']); ?></td>
                 <td class="text-center" style="background-color: #F2F2F2;"><?php echo cms_encode_currency_format($item['total_money']); ?></td>
+                <td class="text-center" style="background-color: #F2F2F2;"><?php echo cms_encode_currency_format($item['customer_pay']); ?></td>
                 <td class="text-center" style="background: #fff;"><?php echo cms_encode_currency_format($item['lack']); ?></td>
                 <td class="text-center" style="background: #fff;"><i title="In" onclick="cms_print_order(1,<?php echo $item['ID']; ?>)"
                                                                      class="fa fa-print blue"

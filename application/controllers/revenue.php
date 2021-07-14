@@ -12,7 +12,7 @@ class Revenue extends CI_Controller
 
     public function index()
     {
-        if ($this->auth == null || !in_array(7, $this->auth['group_permission']))
+        if ($this->auth == null || !in_array(8, $this->auth['group_permission']))
             $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
 
         $data['seo']['title'] = "Phần mềm quản lý bán hàng";
@@ -1047,11 +1047,11 @@ class Revenue extends CI_Controller
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(lack) as total_debt')
                                 ->from('orders')
                                 ->limit($config['per_page'], ($page - 1) * $config['per_page'])
-                                ->order_by('created', 'desc')
                                 ->where(['deleted' => 0, 'order_status' => 1])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
                                 ->group_by('customer_id')
+                                ->order_by('created', 'desc')
                                 ->get()
                                 ->result_array();
                             foreach ($list_customers as $item) {

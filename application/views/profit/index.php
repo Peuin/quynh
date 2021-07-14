@@ -66,7 +66,7 @@
                                 <option value="-1">-Cửa hàng-</option>
                                 <?php foreach ($data['stores'] as $key => $item) : ?>
                                     <option
-                                        value="<?php echo $item['ID']; ?>"><?php echo $item['stock_name']; ?></option>
+                                        value="<?php echo $item['ID']; ?>"><?php echo $item['store_name']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

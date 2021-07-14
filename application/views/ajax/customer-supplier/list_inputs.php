@@ -42,8 +42,8 @@
                 <td class="text-center"><?php echo cms_getNameAuthbyID($item['user_init']); ?></td>
                 <td class="text-center" style="background-color: #F2F2F2;"><?php echo cms_encode_currency_format($item['total_money']); ?></td>
                 <td class="text-center" style="background: #fff;"><?php echo cms_encode_currency_format($item['lack']); ?></td>
-                <td class="text-center" style="background: #fff;"><i title="Copy"
-                                                                     onclick="cms_copy_product(<?php echo $item['ID']; ?>);"
+                <td class="text-center" style="background: #fff;"><i title="In"
+                                                                     onclick="cms_print_input(3,<?php echo $item['ID']; ?>);"
                                                                      class="fa fa-print blue"
                                                                      style="margin-right: 5px;"></i>
                     <i class="fa fa-trash-o" style="color: darkred;" title="Xóa"

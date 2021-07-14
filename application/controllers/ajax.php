@@ -38,7 +38,6 @@ class Ajax extends CI_Controller
 
     private function _check_user($user)
     {
-
         $count = $this->db->where('username', $user['username'])->or_where('email', $user['email'])->from('users')->count_all_results();
         if ($count == 0) {
             return true;
@@ -87,7 +86,9 @@ class Ajax extends CI_Controller
         $data = $this->input->post('data');
         $id = $data['id'];
         $user = $this->db->where('id', $data['id'])->from('users')->get()->row_array();
-        if (!isset($user) && count($user) == 0) {
+        if ($id == $this->auth['id'] && $data['user_status'] == 0) {
+            echo $this->messages;
+        } elseif (!isset($user) && count($user) == 0) {
             echo $this->messages;
         } else {
             if ($data['email'] == $user['email']) {
@@ -100,14 +101,12 @@ class Ajax extends CI_Controller
                     $data = $this->cms_common_string->allow_post($data, ['display_name', 'email', 'group_id', 'user_status']);
                     $data['updated'] = gmdate("Y:m:d H:i:s", time() + 7 * 3600);
                     $this->db->where('id', $id)->update('users', $data);
-
                     echo $this->messages = '1';
                 } else {
                     echo $this->messages = 'Email đã tồn tại!';
                 }
             }
         }
-
     }
 
     private function _check_mail($mail)
@@ -125,10 +124,14 @@ class Ajax extends CI_Controller
         $id = (int)$this->input->post('id');
         $user = $this->db->where('id', $id)->from('users')->get()->row_array();
         if (!isset($user) || count($user) == 0) {
-            echo $this->messages;
+            echo $this->messages = 0;
         } else {
-            //$this->db->where(['id' => $id])->delete('users');
-            echo $this->messages = '1';
+            if ($this->auth['id'] == $id) {
+                echo $this->messages = 0;
+            } else {
+                $this->db->where(['id' => $id])->delete('users');
+                echo $this->messages = 1;
+            }
         }
     }
 
@@ -223,7 +226,7 @@ class Ajax extends CI_Controller
                 $html .= '<td>' . $group['group_name'] . '</td>';
                 $html .= '<td>' . $date . '</td>';
                 $html .= '<td class="text-center">' . cms_getEmployee($group['id']) . '</td>';
-                $html .= '<td class="text-center"><i class="fa fa-pencil-square-o edit-item" title="Sửa" onclick="cms_edit_gritem(' . $group['id'] . ')" style="margin-right: 10px; cursor: pointer;"></i><i onclick="cms_del_gritem(' . $group['id'] . ' )" title="Xóa" class="fa fa-trash-o delete-item" style="cursor: pointer;"></i></td>';
+                $html .= '<td class="text-center"><i onclick="cms_del_gritem(' . $group['id'] . ' )" title="Xóa" class="fa fa-trash-o delete-item" style="cursor: pointer;"></i></td>';
                 $html .= '</tr>';
 
                 $html .= "<tr class='edit-tr-item-{$group['id']}' style='display: none;'>";
@@ -244,16 +247,30 @@ class Ajax extends CI_Controller
     public function cms_upstore()
     {
         $stores = $this->db->from('stores')->get()->result_array();
+
         if (!empty($stores) && count($stores) != 0) {
             $ind = 0;
             $html = '';
             foreach ($stores as $store) {
+                $receipt = $this->db->select('sum(total_money) as total_money')->from('receipt')->where(['deleted' => 0, 'store_id' => $store['ID']])->get()->row_array();
+                $payment = $this->db->select('sum(total_money) as total_money')->from('payment')->where(['deleted' => 0, 'store_id' => $store['ID']])->get()->row_array();
                 $ind++;
                 $html .= "<tr class='tr-item-{$store['ID']}'>";
                 $html .= '<td class="text-center ind">' . $ind . '</td>';
-                $html .= '<td>' . $store['stock_name'] . '</td>';
+                $html .= '<td>' . $store['store_name'] . '</td>';
+                $html .= '<td>' . cms_encode_currency_format($receipt['total_money'] - $payment['total_money']) . '</td>';
                 $html .= '<td>' . $store['created'] . '</td>';
+                $html .= '<td class="text-center"><i class="fa fa-pencil-square-o edit-item" title="Sửa" onclick="cms_edit_store(' . $store['ID'] . ')" style="margin-right: 10px; cursor: pointer;"></i><i onclick="cms_del_store(' . $store['ID'] . ')" title="Xóa" class="fa fa-trash-o delete-item" style="cursor: pointer;"></i></td>';
                 $html .= '</tr>';
+
+                $html .= "<tr class='edit-tr-item-{$store['ID']}' style='display: none;'>";
+                $html .= "<td class='text-center'>{$ind}</td>";
+                $html .= "<td class='itmanv'><input type='text' class='form-control' id='store_name_".$store['ID']."' value='{$store['store_name']}' /></td>";
+                $html .= '<td>' . cms_encode_currency_format($receipt['total_money'] - $payment['total_money']) . '</td>';
+                $html .= '<td>' . $store['created'] . '</td>';
+                $html .= "<td class='text-center'><i class='fa fa-floppy-o' title='Lưu' onclick='cms_update_store( {$store['ID']} )' style='color: #EC971F; cursor: pointer; margin-right: 10px;'></i><i onclick='cms_undo_item( {$store['ID']} )' title='Hủy' class='fa fa-undo' style='color: green; cursor: pointer; margin-right: 5px;'></i></td>";
+                $html .= "</tr>";
+
             }
             echo $this->messages = $html;
 
@@ -298,12 +315,12 @@ class Ajax extends CI_Controller
 
     public function cms_selboxstock()
     {
-        $groups = $this->db->select('ID, stock_name')->from('stores')->get()->result_array();
+        $groups = $this->db->select('ID, store_name')->from('stores')->get()->result_array();
         if (isset($groups) && count($groups)) {
             $html = '';
             $html .= '<select name="stock" id="sel-stock" class="form-control">';;
             foreach ($groups as $group) {
-                $html .= '<option value="' . $group['ID'] . '">' . $group['stock_name'] . '</option>';
+                $html .= '<option value="' . $group['ID'] . '">' . $group['store_name'] . '</option>';
             }
             $html .= '</select>';
             echo $this->messages = $html;
@@ -375,7 +392,6 @@ class Ajax extends CI_Controller
     /*
      * CUSTOMER
     /***********************/
-
 
 
 }

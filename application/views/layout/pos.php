@@ -11,19 +11,10 @@
     <link href="public/templates/css/font-awesome.min.css" rel="stylesheet">
     <link href="public/templates/css/style.css" rel="stylesheet">
     <link href="public/templates/css/jquery-ui.min.css" rel="stylesheet">
-	<!--Start of Zendesk Chat Script-->
-	<script type="text/javascript">
-	window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-	d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-	_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-	$.src="https://v2.zopim.com/?2Z9j3qQJSSSIytel3Hsn5sCSk4aspfwy";z.t=+new Date;$.
-	type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-	</script>
-	<!--End of Zendesk Chat Script-->
 </head>
 <body>
 <header>
-    <?php $this->load->view('common/header', isset($data) ? $data : NULL); ?>
+    <?php $this->load->view('common/headerpos', isset($data) ? $data : NULL); ?>
 </header>
 <section id="pos" class="main" role="main">
     <div class="container-fluid">
@@ -33,7 +24,7 @@
                     <?php
                     $this->load->view('common/modal', isset($data) ? $data : NULL);
                     ?>
-                    <div >
+                    <div>
                         <div class="row">
                             <div class="orders-act">
                                 <div class="col-md-8">
@@ -49,7 +40,9 @@
                                                 <th class="text-center">STT</th>
                                                 <th>Mã hàng</th>
                                                 <th>Tên sản phẩm</th>
+                                                <th class="text-center">Hình ảnh</th>
                                                 <th class="text-center">Số lượng</th>
+                                                <th class="text-center">ĐVT</th>
                                                 <th class="text-center">Giá bán</th>
                                                 <th class="text-center">Thành tiền</th>
                                                 <th></th>
@@ -70,7 +63,7 @@
                                             <div class="morder-info" style="padding: 4px;">
                                                 <div class="tab-contents" style="padding: 8px 6px;">
                                                     <div class="form-group marg-bot-10 clearfix">
-                                                        <div style="padding:0px" class="col-md-4">
+                                                        <div class="col-md-4 padd-0">
                                                             <label>Khách hàng</label>
                                                         </div>
                                                         <div class="col-md-8">
@@ -98,26 +91,27 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group marg-bot-10 clearfix">
-                                                        <div style="padding:0px" class="col-md-4">
+                                                        <div class="col-md-4 padd-0">
                                                             <label>NV bán hàng</label>
                                                         </div>
                                                         <div class="col-md-8">
                                                             <select class="form-control" id="sale_id">
                                                                 <option value="">--Chọn--</option>
                                                                 <?php foreach ($data['sale'] as $item) { ?>
-                                                                    <option
+                                                                    <option <?php if($data['user']['id']==$item['id']) echo 'selected' ?>
                                                                         value="<?php echo $item['id']; ?>"><?php echo $item['display_name']; ?></option>
                                                                 <?php } ?>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group marg-bot-10 clearfix">
-                                                        <div style="padding:0px" class="col-md-4">
+                                                        <div class="col-md-4 padd-0">
                                                             <label>Ghi chú</label>
                                                         </div>
                                                         <div class="col-md-8">
-                                    <textarea id="note-order" cols="" class="form-control" rows="3"
-                                              style="border-radius: 0;"></textarea>
+                                                            <textarea id="note-order" cols="" class="form-control" rows="3"
+                                                                      style="border-radius: 0;">
+                                                            </textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -142,8 +136,24 @@
                                                                 Tiền mặt &nbsp;
                                                                 <input type="radio" class="payment-method"
                                                                        name="method-pay" value="2"> Thẻ&nbsp;
+                                                                <input type="radio" class="payment-method"
+                                                                       name="method-pay" value="3"> CK&nbsp;
                                                             </div>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group marg-bot-10 clearfix">
+                                                        <div class="col-md-4">
+                                                            <label>VAT</label>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <select class="form-control" id="vat">
+                                                                <?php $list = cms_getListVAT();
+                                                                foreach ($list as $key=>$val) { ?>
+                                                                    <option
+                                                                        value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                                                                <?php } ?>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group marg-bot-10 clearfix">
@@ -160,9 +170,14 @@
                                                         <div class="col-md-4">
                                                             <label>Giảm giá (F7)</label>
                                                         </div>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-8" style="display: flex;">
+                                                            <button onclick="cms_change_discount_order()" class="toggle-discount-order">vnđ</button>
+                                                            <button onclick="cms_change_discount_order()" style="display: none;" class="toggle-discount-order">%</button>
                                                             <input type="text"
-                                                                   class="form-control text-right txtMoney discount-order"
+                                                                   class="toggle-discount-order form-control text-right discount-percent-order"
+                                                                   placeholder="0" style="display:none;border-radius: 0 !important;">
+                                                            <input type="text"
+                                                                   class="toggle-discount-order form-control text-right txtMoney discount-order"
                                                                    placeholder="0" style="border-radius: 0 !important;">
                                                         </div>
                                                     </div>

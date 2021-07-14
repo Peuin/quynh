@@ -41,7 +41,9 @@
 $route['default_controller'] = "dashboard";
 $route['backend$'] = "dashboard";
 $route['404_override'] = '';
-
+$route['translate_uri_dashes'] = FALSE;
+$route['ajax-image-upload'] = 'AjaxImageUpload';
+$route['ajax-image-upload/post']['post'] = "AjaxImageUpload/uploadImage";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

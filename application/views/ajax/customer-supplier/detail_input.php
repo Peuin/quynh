@@ -36,7 +36,7 @@
                 <div class="morder-info" style="padding: 4px;">
                     <div class="tab-contents" style="padding: 8px 6px;">
                         <div class="form-group marg-bot-10 clearfix">
-                            <div style="padding:0px" class="col-md-4" >
+                            <div class="col-md-4 padd-0" >
                                 <label>Mã phiếu</label>
                             </div>
                             <div class="col-md-8">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
-                            <div style="padding:0px" class="col-md-4 padd-right-0">
+                            <div class="col-md-4 padd-0">
                                 <label>Nhà cung cấp</label>
                             </div>
                             <div class="col-md-8" style="font-style: italic;">
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
-                            <div style="padding:0px" class="col-md-4">
+                            <div class="col-md-4 padd-0">
                                 <label>Ngày nhập</label>
                             </div>
                             <div class="col-md-8">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
-                            <div style="padding:0px" class="col-md-4">
+                            <div class="col-md-4 padd-0">
                                 <label>Người nhập</label>
                             </div>
                             <div class="col-md-8">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
-                            <div style="padding:0px" class="col-md-4">
+                            <div class="col-md-4 padd-0">
                                 <label>Ghi chú</label>
                             </div>
                             <div class="col-md-8">
@@ -100,6 +100,9 @@
                                     <input disabled type="radio" class="payment-method" name="method-pay"
                                            value="2" <?php echo ($data['_import']['payment_method'] == 2) ? 'checked' : ''; ?>>
                                     Thẻ&nbsp;
+                                    <input disabled type="radio" class="payment-method" name="method-pay"
+                                           value="3" <?php echo ($data['_import']['payment_method'] == 3) ? 'checked' : ''; ?>>
+                                    CK&nbsp;
                                 </div>
 
                             </div>

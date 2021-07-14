@@ -17,9 +17,9 @@
             </p>
             <div class="alert text-center w-hotline" role="alert">
                 <h3>Liên hệ với chúng tôi nếu cần hỗ trợ </h3>
-                <span class="glyphicon glyphicon-earphone"></span>Tổng đài: <strong class="hotline">01257388742</strong>
+                <span class="glyphicon glyphicon-earphone"></span>Tổng đài: <strong class="hotline">0935.559.659</strong>
                 <br>
-                <span class="glyphicon glyphicon-phone"></span>Hotline: <strong class="hotline">01257388742</strong>
+                <span class="glyphicon glyphicon-phone"></span>Hotline: <strong class="hotline">0935.559.659</strong>
 
             </div>
         </div>

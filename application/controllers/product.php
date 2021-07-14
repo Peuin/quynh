@@ -33,8 +33,10 @@ class Product extends CI_Controller
         if ($this->auth == null) $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
         $sls_group = $this->cms_nestedset->dropdown('products_group', NULL, 'manufacture');
         $sls_manufacture = $this->db->from('products_manufacture')->get()->result_array();
+        $sls_unit = $this->db->from('products_unit')->get()->result_array();
         $data['data']['_prd_group'] = $sls_group;
         $data['data']['_prd_manufacture'] = $sls_manufacture;
+        $data['data']['_prd_unit'] = $sls_unit;
         $this->load->view('products/add_prd', isset($data) ? $data : null);
     }
 
@@ -49,8 +51,10 @@ class Product extends CI_Controller
             $data['data']['_detail_product'] = $product;
             $sls_group = $this->cms_nestedset->dropdown('products_group', NULL, 'manufacture');
             $sls_manufacture = $this->db->from('products_manufacture')->get()->result_array();
+            $sls_unit = $this->db->from('products_unit')->get()->result_array();
             $data['data']['_prd_group'] = $sls_group;
             $data['data']['_prd_manufacture'] = $sls_manufacture;
+            $data['data']['_prd_unit'] = $sls_unit;
             $this->load->view('products/add_prd', isset($data) ? $data : null);
         }
     }
@@ -66,8 +70,10 @@ class Product extends CI_Controller
             $data['data']['_detail_product'] = $product;
             $sls_group = $this->cms_nestedset->dropdown('products_group', NULL, 'manufacture');
             $sls_manufacture = $this->db->from('products_manufacture')->get()->result_array();
+            $sls_unit = $this->db->from('products_unit')->get()->result_array();
             $data['data']['_prd_group'] = $sls_group;
             $data['data']['_prd_manufacture'] = $sls_manufacture;
+            $data['data']['_prd_unit'] = $sls_unit;
             $this->load->view('products/edit_prd', isset($data) ? $data : null);
         }
     }
@@ -90,6 +96,24 @@ class Product extends CI_Controller
         }
     }
 
+    public function cms_create_unit()
+    {
+        if ($this->auth == null)
+            $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
+
+        $data = $this->input->post('data');
+        $prd_unit = $this->db->from('products_unit')->where('prd_unit_name', $data['prd_unit_name'])->get()->row_array();
+        if (!empty($prd_unit) && count($prd_unit)) {
+            echo $this->messages = '0';
+            return;
+        } else {
+            $data['created'] = gmdate("Y:m:d H:i:s", time() + 7 * 3600);
+            $data['user_init'] = $this->auth['id'];
+            $this->db->insert('products_unit', $data);
+            echo $this->messages = '1';
+        }
+    }
+
     public function cms_paging_manufacture($page = 1)
     {
         $config = $this->cms_common->cms_pagination_custom();
@@ -107,6 +131,23 @@ class Product extends CI_Controller
         $this->load->view('ajax/product/list_prd_manufacture', isset($data) ? $data : null);
     }
 
+    public function cms_paging_unit($page = 1)
+    {
+        $config = $this->cms_common->cms_pagination_custom();
+        $total_prdunit = $this->db->from('products_unit')->count_all_results();
+        $config['base_url'] = 'cms_paging_unit';
+        $config['total_rows'] = $total_prdunit;
+        $config['per_page'] = 10;
+        $this->pagination->initialize($config);
+        $data['_pagination_link'] = $this->pagination->create_links();
+        $data ['_list_prd_unit'] = $this->db->from('products_unit')->limit($config['per_page'], ($page - 1) * $config['per_page'])->order_by('created', 'desc')->get()->result_array();
+        if ($page > 1 && ($total_prdunit - 1) / ($page - 1) == 10)
+            $page = $page - 1;
+
+        $data ['page'] = $page;
+        $this->load->view('ajax/product/list_prd_unit', isset($data) ? $data : null);
+    }
+
     public function cms_delete_manufacture($id)
     {
         $id = (int)$id;
@@ -116,6 +157,19 @@ class Product extends CI_Controller
             return;
         } else {
             $this->db->where('ID', $id)->delete('products_manufacture');
+            echo $this->messages = '1';
+        }
+    }
+
+    public function cms_delete_unit($id)
+    {
+        $id = (int)$id;
+        $prd_manuf = $this->db->from('products_unit')->where('ID', $id)->get()->row_array();
+        if (!isset($prd_manuf) || count($prd_manuf) == 0) {
+            echo $this->messages;
+            return;
+        } else {
+            $this->db->where('ID', $id)->delete('products_unit');
             echo $this->messages = '1';
         }
     }
@@ -131,6 +185,23 @@ class Product extends CI_Controller
                 $data['updated'] = gmdate("Y:m:d H:i:s", time() + 7 * 3600);
                 $data['user_upd'] = $this->auth['id'];
                 $this->db->where('ID', $id)->update('products_manufacture', $data);
+                echo $this->messages = '1';
+            }
+        } else
+            echo $this->messages = '0';
+    }
+
+    public function cms_update_prdunit($id)
+    {
+        $id = (int)$id;
+        $data = $this->input->post('data');
+        $prd_manuf = $this->db->from('products_unit')->where('ID', $id)->get()->row_array();
+        if (!empty($prd_manuf) || count($prd_manuf) != 0) {
+            $check = $this->db->from('products_unit')->where('prd_unit_name', $data['prd_unit_name'])->get()->result_array();
+            if (empty($check) && count($check) == 0) {
+                $data['updated'] = gmdate("Y:m:d H:i:s", time() + 7 * 3600);
+                $data['user_upd'] = $this->auth['id'];
+                $this->db->where('ID', $id)->update('products_unit', $data);
                 echo $this->messages = '1';
             }
         } else
@@ -227,7 +298,30 @@ class Product extends CI_Controller
         endforeach;
         echo '</optgroup>';
         echo '<optgroup label="------------------------">
-        <option value="product_manufacture" data-toggle="modal" data-target="#list-prd-manufacture">Tạo mới danh mục
+        <option value="product_manufacture" data-toggle="modal" data-target="#list-prd-manufacture">Tạo mới nhà sản xuất
+        </option></optgroup>';
+        $html = ob_get_contents();
+        ob_end_clean();
+        echo $this->messages = $html;
+    }
+
+    public function cms_load_listunit()
+    {
+        $this->cms_nestedset->set('products_group');
+        $data = $this->db->from('products_unit')->order_by('created', 'desc')->get()->result_array();
+        ob_start();
+        echo '<option value="-1" selected="selected">--Đơn vị tính--</option>';
+        echo '<optgroup label="Chọn đơn vị tính">';
+        foreach ($data as $key => $item) :
+            ?>
+            <option
+                value="<?php echo $item['ID']; ?>"><?php echo $item['prd_unit_name']; ?>
+            </option>
+        <?php
+        endforeach;
+        echo '</optgroup>';
+        echo '<optgroup label="------------------------">
+        <option value="product_unit" data-toggle="modal" data-target="#list-prd-unit">Tạo mới đơn vị tính
         </option></optgroup>';
         $html = ob_get_contents();
         ob_end_clean();
@@ -297,10 +391,41 @@ class Product extends CI_Controller
         echo $this->messages = '1';
     }
 
+    public function upload_img(){
+        $path = "public/templates/uploads/";
+        $valid_formats = array("jpg", "png", "gif", "bmp","jpeg");
+        if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST")
+        {
+            $name = $_FILES['photo']['name'];
+            $size = $_FILES['photo']['size'];
+            if(strlen($name)) {
+                list($txt, $ext) = explode(".", $name);
+                if(in_array($ext,$valid_formats)) {
+                    if($size<(10024*10024)) {
+                        $image_name = time().".".$ext;
+                        $tmp = $_FILES['photo']['tmp_name'];
+                        if(move_uploaded_file($tmp, $path.$image_name)){
+                            echo $image_name;
+                        }
+                        else
+                            echo "Image Upload failed";
+                    }
+                    else
+                        echo "Image file size max 10 MB";
+                }
+                else
+                    echo "Invalid file format..";
+            }
+            else
+                echo "Please select image..!";
+            exit;
+        }
+    }
+
     public function cms_add_product($store_id)
     {
         $data = $this->input->post('data');
-        $data = $this->cms_common_string->allow_post($data, ['prd_code', 'prd_name', 'prd_sls', 'prd_inventory', 'prd_allownegative', 'prd_origin_price', 'prd_sell_price', 'prd_group_id', 'prd_manufacture_id', 'prd_vat', 'prd_image_url', 'prd_descriptions', 'display_website', 'prd_new', 'prd_hot', 'prd_highlight']);
+        $data = $this->cms_common_string->allow_post($data, ['prd_code', 'prd_name', 'prd_sls', 'prd_inventory', 'prd_allownegative','prd_image_url', 'prd_origin_price', 'prd_sell_price', 'prd_group_id', 'prd_manufacture_id','prd_unit_id', 'prd_vat', 'prd_descriptions', 'display_website', 'prd_new', 'prd_hot', 'prd_highlight']);
         $check_code = $this->db->select('ID')->from('products')->where('prd_code', $data['prd_code'])->get()->row_array();
         if (!empty($check_code) && count($check_code)) {
             echo $this->messages = 'Mã sản phẩm ' . $data['prd_code'] . ' đã tồn tại trong hệ thống. Vui lòng chọn mã khác.';
@@ -323,6 +448,9 @@ class Product extends CI_Controller
                 else if ($max_code < 100000)
                     $data['prd_code'] = 'SP' . ($max_code);
             }
+
+            if($data['prd_sls']=='')
+                $data['prd_sls']= 0;
 
             $quantity = $data['prd_sls'];
             $this->db->insert('products', $data);
@@ -359,7 +487,7 @@ class Product extends CI_Controller
     public function cms_update_product($id)
     {
         $data = $this->input->post('data');
-        $data = $this->cms_common_string->allow_post($data, ['prd_code', 'prd_name', 'prd_sls', 'prd_inventory', 'prd_allownegative', 'prd_origin_price', 'prd_sell_price', 'prd_group_id', 'prd_manufacture_id', 'prd_vat', 'prd_image_url', 'prd_descriptions', 'display_website', 'prd_new', 'prd_hot', 'prd_highlight']);
+        $data = $this->cms_common_string->allow_post($data, ['prd_code', 'prd_name', 'prd_sls', 'prd_inventory', 'prd_allownegative', 'prd_origin_price', 'prd_sell_price', 'prd_group_id', 'prd_manufacture_id','prd_unit_id','prd_image_url', 'prd_descriptions', 'display_website', 'prd_new', 'prd_hot', 'prd_highlight']);
         $data['user_upd'] = $this->auth['id'];
         $this->db->where('ID', $id)->update('products', $data);
         echo $this->messages = "1";

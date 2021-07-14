@@ -9,7 +9,7 @@
         </div>
     </div>
 </div>
-<div class="main-space customer"></div>
+<div class="main-space orders-space"></div>
 <div class="row account-info">
     <div class="col-md-6">
         <div class="form-horizontal">

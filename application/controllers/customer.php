@@ -89,6 +89,43 @@ class Customer extends CI_Controller
         $this->load->view('ajax/customer-supplier/list_orders', isset($data) ? $data : null);
     }
 
+    public function cms_paging_order_debt_by_customer_id($page = 1)
+    {
+        $option = $this->input->post('data');
+        $config = $this->cms_common->cms_pagination_custom();
+        $config['per_page'] = 100;
+
+        $total_orders = $this->db
+            ->select('count(ID) as quantity, sum(total_money) as total_money, sum(lack) as total_debt')
+            ->from('orders')
+            ->where(['deleted'=> 0,'order_status'=>1])
+            ->where(['customer_id'=> $option['customer_id'],'lack >'=>0])
+            ->get()
+            ->row_array();
+        $data['_list_orders'] = $this->db
+            ->from('orders')
+            ->limit($config['per_page'], ($page - 1) * $config['per_page'])
+            ->order_by('created', 'asc')
+            ->where(['deleted'=> 0,'order_status'=>1])
+            ->where(['customer_id'=> $option['customer_id'],'lack >'=>0])
+            ->get()
+            ->result_array();
+
+        $data['_list_customer'] = $this->cms_common->unique_multidim_array($data['_list_orders'], 'customer_id');
+        $data['customer_id'] = $option['customer_id'];
+        $config['base_url'] = 'cms_paging_order_debt_by_customer_id';
+        $config['total_rows'] = $total_orders['quantity'];
+        $this->pagination->initialize($config);
+        $_pagination_link = $this->pagination->create_links();
+        $data['total_orders'] = $total_orders;
+        if ($page > 1 && ($total_orders['quantity'] - 1) / ($page - 1) == 10)
+            $page = $page - 1;
+
+        $data['page'] = $page;
+        $data['_pagination_link'] = $_pagination_link;
+        $this->load->view('ajax/customer-supplier/list_orders_debt', isset($data) ? $data : null);
+    }
+
     public function cms_paging_listcustomer($page = 1)
     {
         $config = $this->cms_common->cms_pagination_custom();

@@ -25,9 +25,14 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <center style="    font-size: 40px;
-    color: #fff;
-    padding-top: 80px;">POS SHOP</center>
+               <img src="public/templates/images/logoqn.png"
+                     class="img-responsive col-sm-4 col-sm-offset-4" style="padding: 15px;"/>	
+					 
+            </div>
+			<div class="col-md-4 col-md-offset-4">
+               <!-- <img src="public/templates/images/logoqn.png"
+                     class="img-responsive col-sm-4 col-sm-offset-4" style="padding: 10px;"/>	 -->
+					 
             </div>
         </div>
     </div>

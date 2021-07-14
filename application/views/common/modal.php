@@ -417,9 +417,6 @@
     </div>
 </div>
 
-<!-- end supacture -->
-
-<!-- PRODUCTS -->
 <div class="modal fade" id="list-prd-manufacture" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -437,8 +434,8 @@
                                 href="#list-manufacture" aria-controls="list-manufacture" role="tab"
                                 data-toggle="tab"><i class="fa fa-list"></i> Danh sách Nhà sản xuất</a></li>
                         <li role="presentation"><a href="#create-manufacture" aria-controls="create-manufacture"
-                                                   role="tab" data-toggle="tab"><i class="fa fa-plus"></i> Tạo mới chủng
-                                loại</a></li>
+                                                   role="tab" data-toggle="tab"><i class="fa fa-plus"></i> Tạo mới nhà sản xuất
+                            </a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -464,6 +461,62 @@
                                                     onclick="cms_create_manufacture(1);"><i class="fa fa-check"></i> Lưu
                                             </button>
                                             <button type="button" class="btn btn-primary " onclick="cms_create_manufacture(0);"><i
+                                                    class="fa fa-floppy-o"></i> Lưu và tiếp tục
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal"><i
+                        class="fa fa-undo"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="list-prd-unit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Quản lý đơn vị tính</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabtable">
+                    <ul class="nav nav-tabs tab-setting" role="tablist"
+                        style="background-color: #EFF3F8; padding: 5px 0 0 15px;">
+                        <li role="presentation" class="active list-unit-click" style="margin-right: 3px;"><a
+                                href="#list-unit" aria-controls="list-unit" role="tab"
+                                data-toggle="tab"><i class="fa fa-list"></i> Danh sách đơn vị tính</a></li>
+                        <li role="presentation"><a href="#create-unit" aria-controls="create-unit"
+                                                   role="tab" data-toggle="tab"><i class="fa fa-plus"></i> Tạo mới đơn vị tính</a></li>
+                    </ul>
+                    <div class="tab-content" style="padding:10px; border: 1px solid #ddd; border-top: none;">
+                        <div role="tabpanel" class="tab-pane active" id="list-unit">
+                            <div class="prd_unit-body">
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="create-unit">
+                            <div class="row form-horizontal">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-7 padd-right-0">
+                                            <input type="text" style="border-radius: 0 !important;" class="form-control"
+                                                   id="prd_unit_name" value="" placeholder="Nhập tên đơn vị tính">
+                                        </div>
+                                        <div class="input-groups-btn col-md-5 padd-0">
+                                            <button type="button" class="btn btn-primary"
+                                                    style="border-radius: 0 3px 3px 0;"
+                                                    onclick="cms_create_unit(1);"><i class="fa fa-check"></i> Lưu
+                                            </button>
+                                            <button type="button" class="btn btn-primary " onclick="cms_create_unit(0);"><i
                                                     class="fa fa-floppy-o"></i> Lưu và tiếp tục
                                             </button>
                                         </div>

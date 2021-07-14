@@ -2,11 +2,11 @@
     <ul class="nav nav-tabs tab-setting" role="tablist">
         <li role="presentation" class="active"><a href="#user" aria-controls="home" role="tab" data-toggle="tab"><i
                     class="fa fa-user"></i> Nhân viên</a></li>
-        <!-- <li role="presentation"><a href="#functions" aria-controls="profile" role="tab" data-toggle="tab"><i
+        <li role="presentation"><a href="#functions" aria-controls="profile" role="tab" data-toggle="tab"><i
                     class="fa fa-cog"></i> Thiết lập chức năng</a></li>
         <li role="presentation"><a href="#print" aria-controls="print" role="tab" data-toggle="tab">Mẫu hóa
                 đơn</a></li>
-        <li role="presentation"><a href="#stores" aria-controls="stores" role="tab" data-toggle="tab">Kho</a> -->
+        <li role="presentation"><a href="#stores" aria-controls="stores" role="tab" data-toggle="tab">Kho</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -96,13 +96,12 @@
                                 </tr>
                             <?php endif;
                             ?>
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-           <!-- <h3>Chức năng cho nhóm người dùng</h3>
+            <h3>Chức năng cho nhóm người dùng</h3>
 
             <div class="cms-function-user-info">
                 <table class="table table-hover table-bordered">
@@ -176,21 +175,19 @@
 
                     <p><span style="font-weight: bold;">[Nhân viên bán hàng]</span> chỉ được bán hàng, nhập trả hàng và
                         xem báo cáo cuối ngày</p>
-                </div> 
+                </div>
             </div>
-         </div>
+        </div>
         <div role="tabpanel" class="tab-pane" id="functions">
             <div class="panel panel-primary" style="margin-top: 20px">
                 <div class="panel-heading">
                     <i class="fa fa-users"></i> Nhóm người dùng
-                     <!--                    <div class="action pull-right">-->
-                    <!--                        <button class="btn btn-default btn-sm create-group btn-in-panel blue" data-toggle="modal"-->
-                    <!--                                data-target="#create-group"><i class="fa fa-pencil blue"></i> Thêm nhóm mới-->
-                    <!--                        </button>-->
-                    <!--                        | <i class="fa fa-refresh" style="font-size: 14px; cursor: pointer;"-->
-                    <!--                             onclick="cms_upgroup()"></i>-->
-                    <!--                    </div>-->
-              <!-- </div>
+                                        <div class="action pull-right">
+                                            <button class="btn btn-default btn-sm create-group btn-in-panel blue" data-toggle="modal"
+                                                    data-target="#create-group"><i class="fa fa-pencil blue"></i> Thêm nhóm mới
+                                            </button>
+                                        </div>
+                </div>
                 <div class="panel-body">
                     <div class="table-responsive ">
                         <table class="table table-group table-hover">
@@ -208,34 +205,40 @@
                     </div>
                 </div>
             </div>
-                              <div class="panel panel-primary" style="margin-top: 20px">
-                            <i class="fa fa-user"></i> Danh sách chức năng
-                        <button class="btn btn-default btn-sm create-nv pull-right btn-in-panel blue" data-toggle="modal"
-                                   data-target="#create-func"><i class="fa fa-pencil blue"></i> Thêm
-                            </button>
-                             <button type="button" style="margin-right: 5px;" class="btn btn-info btn-sm btn-in-panel pull-right"
-                                     onclick="cms_savefunc()"><i class="fa fa-floppy-o"></i>
-                       </div>
-                        <div class="panel-body">
-                          <div class="group-user">
-                          <h5>Nhóm người sử dụng</h5>
-           
-                                <div class="group-radio">
-                           <input type="radio" name="group" value="1" checked> <span>Chủ cửa hàng</span> &nbsp;&nbsp;
-                                  <input type="radio" name="group" value="2"> <span>Quản lý</span> &nbsp;&nbsp;
-                             <input type="radio" name="group" value="3"> <span>Nhân viên</span> &nbsp;&nbsp;
-                          </div>
-                            </div>
+            <div class="panel panel-primary" style="margin-top: 20px">
+                <div class="panel-heading">
+                    <i class="fa fa-user"></i> Danh sách chức năng
+                    <button type="button" style="margin-right: 5px;" class="btn btn-info btn-sm btn-in-panel pull-right" name="" onclick="cms_savefunc()"><i class="fa fa-floppy-o"></i> Lưu</button>
+                </div>
+                <div class="panel-body">
+                    <div class="group-user">
+                        <h5>Nhóm người sử dụng</h5>
+                        <div class="group-radio">
+                            <input type="radio" name="group" value="1" checked > <span>Chủ cửa hàng</span> &nbsp;&nbsp;
+                            <input type="radio" name="group" value="2"> <span>Quản lý</span> &nbsp;&nbsp;
+                            <input type="radio" name="group" value="3"> <span>Nhân viên</span> &nbsp;&nbsp;
+                        </div>
                     </div>
-                      <div class="panel-footer clearfix">
-                      <div class="btn-groups pull-right">
-                            <button type="button" class="btn btn-info btn-in-panel"  onclick="cms_savefunc()">
-                                      class="fa fa-floppy-o"></i>
-                                   </button>
-                               </div>
-                           </div>
-                      </div>
-			
+                    <div class="table-responsive table-function">
+                        <table class="table table-hover">
+                            <thead>
+                            <th class="text-center ind">#</th>
+                            <th>Chức năng</th>
+                            <th class="text-center" style="max-width: 10px;">
+                                <label class="checkbox" style="margin: 0;"><input type="checkbox"  class="checkbox chkAll"><span style="width: 15px; height: 15px;"></span></label>
+                            </th>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel-footer clearfix">
+                    <div class="btn-groups pull-right">
+                        <button type="button" class="btn btn-info btn-in-panel" onclick="cms_savefunc()"><i class="fa fa-floppy-o"></i> Lưu</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="print">
             <div class="col-sm-12 no-padding">
@@ -256,9 +259,6 @@
                                     onclick="cms_save_template();">
                                 <i class="fa fa-save"></i>
                             </button>
-                        <button title="Trợ giúp" class="btn btn-info btn-sm" type="button">
-                           <i class="fa fa-file-archive-o"></i>
-                          </button>
                         </div>
                         <div class="widget-body">
                             <div id="ckeditor"><?php echo $data['template']['content']; ?></div>
@@ -296,7 +296,9 @@
                             <thead>
                             <th class="text-center ind">#</th>
                             <th>Tên Kho</th>
+                            <th>Sổ Quỹ</th>
                             <th>Ngày tạo</th>
+                            <th></th>
                             </thead>
                             <tbody>
                             </tbody>
@@ -305,6 +307,6 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 </div>
 

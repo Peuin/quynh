@@ -63,6 +63,21 @@ if (!function_exists('cms_getNamemanufacturebyID')) {
         return $name;
     }
 }
+
+if (!function_exists('cms_getNameunitbyID')) {
+    function cms_getNameunitbyID($id)
+    {
+        $name = 'Chưa có';
+        $CI =& get_instance();
+        $unit = $CI->db->select('prd_unit_name')->from('products_unit')->where('ID', $id)->get()->row_array();
+        if (isset($unit) && count($unit)) {
+            $name = $unit['prd_unit_name'];
+        }
+
+        return $name;
+    }
+}
+
 if (!function_exists('cms_getNamecustomerbyID')) {
     function cms_getNamecustomerbyID($id)
     {
@@ -118,21 +133,96 @@ if (!function_exists('cms_getNamesupplierbyID')) {
         return $name;
     }
 }
+
+if (!function_exists('cms_getNameVATbyID')) {
+    function cms_getNameVATbyID($id)
+    {
+        $list = cms_getListVAT();
+        return $list[$id];
+    }
+}
+
+if (!function_exists('cms_getListVAT')) {
+    function cms_getListVAT()
+    {
+        return array(
+            '0' => '0%',
+            '5' => '5%',
+            '10' => '10%'
+        );
+    }
+}
+
+if (!function_exists('cms_getListReceiptType')) {
+    function cms_getListReceiptType()
+    {
+        return array(
+            '3' => 'Thu bán hàng',
+			'5' => 'Thu nhân viên',
+			'6' => 'Thu sửa chữa',
+			'7' => 'Thu dịch vụ',
+            '4' => 'Thu khác'
+        );
+    }
+}
+
+if (!function_exists('cms_getListPaymentType')) {
+    function cms_getListPaymentType()
+    {
+        return array(
+            '2' => 'Chi mua hàng',
+            '4' => 'Chi nhân viên',
+			'5' => 'Chi cố định',
+			'6' => 'Chi khách hàng',
+			'3' => 'Chi khác'
+        );
+    }
+}
+
+if (!function_exists('cms_getNamePaymentTypeByID')) {
+    function cms_getNamePaymentTypeByID($id)
+    {
+        $list = cms_getListPaymentType();
+        return $list[$id];
+    }
+}
+
+
+if (!function_exists('cms_getNameReceiptTypeByID')) {
+    function cms_getNameReceiptTypeByID($id)
+    {
+        $list = cms_getListReceiptType();
+        return $list[$id];
+    }
+}
+
 if (!function_exists('cms_getNamestatusbyID')) {
     function cms_getNamestatusbyID($id)
     {
         $name = "";
         switch ($id) {
+            case '0': {
+                $name = 'Khởi tạo';
+                break;
+            }
             case '1': {
                 $name = 'Hoàn thành';
                 break;
             }
             case '2': {
-                $name = 'Lưu tạm';
+                $name = 'Xác nhận';
                 break;
             }
-            case '0': {
-                $name = 'Lưu tạm';
+            case '3': {
+                $name = 'Đang giao';
+                break;
+            }
+            case '4': {
+                $name = 'Đã giao';
+                break;
+            }
+            case '5': {
+                $name = 'Hủy';
                 break;
             }
         }
@@ -144,7 +234,13 @@ if (!function_exists('cms_finding_productbyID')) {
     function cms_finding_productbyID($id)
     {
         $CI =& get_instance();
-        $product = $CI->db->select('ID,prd_code,prd_name, prd_sell_price')->where('ID', $id)->from('products')->get()->row_array();
+        $product = $CI->db
+            ->select('products.ID,prd_code,prd_unit_name,prd_name, prd_sell_price, prd_image_url,prd_edit_price')
+            ->where('products.ID', $id)
+            ->from('products')
+            ->join('products_unit', 'products_unit.ID=products.prd_unit_id', 'LEFT')
+            ->get()
+            ->row_array();
         return $product;
     }
 }
@@ -169,9 +265,9 @@ if (!function_exists('cms_getNamestockbyID')) {
     {
         $name = "không xác định";
         $CI =& get_instance();
-        $customer = $CI->db->select('stock_name')->from('stores')->where('ID', $id)->get()->row_array();
+        $customer = $CI->db->select('store_name')->from('stores')->where('ID', $id)->get()->row_array();
         if (isset($customer) && count($customer)) {
-            $name = $customer['stock_name'];
+            $name = $customer['store_name'];
         }
 
         return $name;

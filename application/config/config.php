@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'mysql://zlcazhfxag983emz:vitc2rkvtppbf8rv@ryvdxs57afyjk41z.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/azpzvdgepi9y3h16';
+$config['base_url'] = 'mysql://hjpt0qhmgqu0q26a:ovnkpgl653iw351y@d9c88q3e09w6fdb2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/fd94usxu1qbyxpcj';
 
 /*
 |--------------------------------------------------------------------------

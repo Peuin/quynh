@@ -13,9 +13,6 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#create-cust"><i class="fa fa-plus"></i> Tạo KH
                             </button>
-<!--                            <button type="button" class="btn btn-success"  onclick=""><i-->
-<!--                                    class="fa fa-download"></i> Xuất Excel-->
-<!--                            </button>-->
                         </div>
                     </div>
                 </div>
@@ -32,16 +29,13 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-sup">
                                 <i class="fa fa-plus"></i>Tạo NCC
                             </button>
-<!--                            <button type="button" class="btn btn-success" ><i class="fa fa-download"></i> Xuất-->
-<!--                                Excel-->
-<!--                            </button>-->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="main-space customer"></div>
+    <div class="main-space orders-space"></div>
     <div>
         <ul class="nav nav-tabs tab-setting" role="tablist" style="padding-left: 20px;">
             <li role="presentation" onclick="tab_click_act('customer');" class="active"><a href="#cus"

@@ -13,7 +13,9 @@ class Account extends CI_Controller
 
     public function index()
     {
-        if ($this->auth == null) $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
+        if ($this->auth == null)
+            $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
+
         $data['seo']['title'] = "Phần mềm quản lý bán hàng";
         $store = $this->db->from('stores')->get()->result_array();
         $data['data']['store'] = $store;
@@ -42,7 +44,8 @@ class Account extends CI_Controller
         if ($this->_check_password($user_id, $data['oldpass'])) {
             $update['salt'] = $this->cms_common_string->random(69, true);
             $update['password'] = $this->cms_common_string->password_encode($data['newpass'], $update['salt']);
-            //$this->db->where('id', $user_id)->update('users', $update);
+            $this->db->where('id', $user_id)->update('users', $update);
+            //tạm thời khóa ko cho đổi mật khẩu
             echo $this->messages = 1;
         }else
             echo $this->messages = 0;

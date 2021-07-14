@@ -98,9 +98,11 @@
                                     Tiền mặt &nbsp;
                                     <input disabled type="radio" class="payment-method" name="method-pay"
                                            value="2" <?php echo ($data['_order']['payment_method'] == 2) ? 'checked' : ''; ?>>
+                                    Thẻ&nbsp;
+                                    <input disabled type="radio" class="payment-method" name="method-pay"
+                                           value="3" <?php echo ($data['_order']['payment_method'] == 3) ? 'checked' : ''; ?>>
                                     CK&nbsp;
                                 </div>
-
                             </div>
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
@@ -115,7 +117,7 @@
                         </div>
                         <div class="form-group marg-bot-10 clearfix">
                             <div class="col-md-5">
-                                <label>Chiếc khấu</label>
+                                <label>Chiết khấu</label>
                             </div>
                             <div class="col-md-7">
                                 <div><?php echo cms_encode_currency_format($data['_order']['coupon']); ?></div>

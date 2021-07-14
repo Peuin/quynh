@@ -106,7 +106,43 @@ class Supplier extends CI_Controller
         $data['_pagination_link'] = $_pagination_link;
         $this->load->view('ajax/customer-supplier/list_inputs', isset($data) ? $data : null);
     }
-    
+
+    public function cms_paging_input_debt_by_supplier_id($page = 1)
+    {
+        $option = $this->input->post('data');
+        $config = $this->cms_common->cms_pagination_custom();
+        $config['per_page'] = 100;
+        $total_inputs = $this->db
+            ->select('count(ID) as quantity, sum(total_money) as total_money, sum(lack) as total_debt')
+            ->from('input')
+            ->where(['deleted'=> 0,'input_status'=>1])
+            ->where(['supplier_id'=> $option['supplier_id'],'lack >'=>0])
+            ->get()
+            ->row_array();
+        $data['_list_inputs'] = $this->db
+            ->from('input')
+            ->limit($config['per_page'], ($page - 1) * $config['per_page'])
+            ->order_by('created', 'desc')
+            ->where(['deleted'=> 0,'input_status'=>1])
+            ->where(['supplier_id'=> $option['supplier_id'],'lack >'=>0])
+            ->get()
+            ->result_array();
+
+        $data['_list_customer'] = $this->cms_common->unique_multidim_array($data['_list_inputs'], 'supplier_id');
+        $data['supplier_id'] = $option['supplier_id'];
+        $config['base_url'] = 'cms_paging_input_debt_by_supplier_id';
+        $config['total_rows'] = $total_inputs['quantity'];
+        $this->pagination->initialize($config);
+        $_pagination_link = $this->pagination->create_links();
+        $data['total_inputs'] = $total_inputs;
+        if ($page > 1 && ($total_inputs['quantity'] - 1) / ($page - 1) == 10)
+            $page = $page - 1;
+
+        $data['page'] = $page;
+        $data['_pagination_link'] = $_pagination_link;
+        $this->load->view('ajax/customer-supplier/list_inputs_debt', isset($data) ? $data : null);
+    }
+
     public function cms_paging_supplier($page = 1)
     {
         $config = $this->cms_common->cms_pagination_custom();

@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<div class="main-space customer"></div>
+<div class="main-space orders-space"></div>
 
 <div class="products-content" style="margin-bottom: 25px;">
     <div class="basic-info">

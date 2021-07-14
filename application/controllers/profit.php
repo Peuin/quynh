@@ -12,7 +12,7 @@ class Profit extends CI_Controller
 
     public function index()
     {
-        if ($this->auth == null || !in_array(7, $this->auth['group_permission']))
+        if ($this->auth == null || !in_array(10, $this->auth['group_permission']))
             $this->cms_common_string->cms_redirect(CMS_BASE_URL . 'backend');
 
         $data['seo']['title'] = "Phần mềm quản lý bán hàng";
@@ -44,6 +44,7 @@ class Profit extends CI_Controller
     {
         $option = $this->input->post('data');
         $config = $this->cms_common->cms_pagination_custom();
+        $return_money=array();
         $option['date_to'] = date('Y-m-d', strtotime($option['date_to'] . ' +1 day'));
         if ($option['type'] == 1) {
             if ($option['option1'] > -1) {
@@ -75,6 +76,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -99,6 +113,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     } else {
                         if ($option['option4'] > -1) {
@@ -125,6 +151,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -147,6 +185,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     }
                 } else {
@@ -175,6 +224,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -197,6 +258,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     } else {
                         if ($option['option4'] > -1) {
@@ -221,6 +293,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -241,6 +324,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     }
                 }
@@ -271,6 +364,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -293,6 +398,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     } else {
                         if ($option['option4'] > -1) {
@@ -317,6 +433,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -337,6 +464,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     }
                 } else {
@@ -363,6 +500,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -383,6 +531,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     } else {
                         if ($option['option4'] > -1) {
@@ -405,6 +563,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         } else {
                             $total_orders = $this->db
                                 ->select('count(store_id) as quantity, sum(total_money) as total_money, sum(total_origin_price) as total_origin_price, sum(coupon) as total_discount, sum(total_quantity) as total_quantity')
@@ -423,12 +592,23 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->result_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                         }
                     }
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);
@@ -457,6 +637,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -497,6 +690,18 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -541,6 +746,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -578,6 +795,17 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -622,6 +850,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -659,6 +899,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -700,6 +951,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -734,6 +996,16 @@ class Profit extends CI_Controller
                                 ->where('customer_id', $option['option1'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -778,6 +1050,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -816,6 +1100,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -858,6 +1153,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -893,6 +1199,16 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -935,6 +1251,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -970,6 +1297,16 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_customers = $this->db
@@ -1009,6 +1346,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1043,6 +1390,15 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_customers = $this->db
                                 ->select('customer_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1071,7 +1427,9 @@ class Profit extends CI_Controller
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);
@@ -1100,6 +1458,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1140,6 +1511,18 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1184,6 +1567,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1222,6 +1617,17 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1267,6 +1673,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1306,6 +1724,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1349,6 +1778,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1384,6 +1824,16 @@ class Profit extends CI_Controller
                                 ->where('customer_id', $option['option1'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1429,6 +1879,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1467,6 +1929,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1509,6 +1982,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1543,6 +2027,16 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1584,6 +2078,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1619,6 +2124,16 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_users = $this->db
@@ -1658,6 +2173,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1692,6 +2217,15 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_users = $this->db
                                 ->select('user_init, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1720,7 +2254,9 @@ class Profit extends CI_Controller
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);
@@ -1749,6 +2285,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1790,6 +2339,18 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -1835,6 +2396,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1873,6 +2446,17 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -1918,6 +2502,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -1956,6 +2552,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -1998,6 +2605,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2033,6 +2651,16 @@ class Profit extends CI_Controller
                                 ->where('customer_id', $option['option1'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -2078,6 +2706,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2116,6 +2756,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -2158,6 +2809,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2193,6 +2855,16 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -2235,6 +2907,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2270,6 +2953,16 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_sales = $this->db
@@ -2309,6 +3002,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2343,6 +3046,15 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_sales = $this->db
                                 ->select('sale_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2371,7 +3083,9 @@ class Profit extends CI_Controller
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);
@@ -2400,6 +3114,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2440,6 +3167,18 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2484,6 +3223,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2522,6 +3273,17 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2567,6 +3329,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2604,6 +3378,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2645,6 +3430,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2680,6 +3476,16 @@ class Profit extends CI_Controller
                                 ->where('customer_id', $option['option1'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2725,6 +3531,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2762,6 +3580,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2803,6 +3632,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2838,6 +3678,16 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2880,6 +3730,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2914,6 +3775,16 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $list_stores = $this->db
@@ -2952,6 +3823,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -2986,6 +3867,15 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $list_stores = $this->db
                                 ->select('store_id, sum(total_money) as total_money,count(*) as total_order, sum(total_quantity) as total_quantity, sum(coupon) as total_discount, sum(total_origin_price) as total_origin_price')
                                 ->from('orders')
@@ -3014,7 +3904,9 @@ class Profit extends CI_Controller
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);
@@ -3043,6 +3935,19 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3070,6 +3975,18 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3102,6 +4019,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3127,6 +4056,17 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3160,6 +4100,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3185,6 +4137,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3215,6 +4178,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3238,6 +4212,16 @@ class Profit extends CI_Controller
                                 ->where('customer_id', $option['option1'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('customer_id', $option['option1'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3272,6 +4256,18 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3297,6 +4293,17 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3327,6 +4334,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3350,6 +4368,16 @@ class Profit extends CI_Controller
                                 ->where('user_init', $option['option2'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.user_init', $option['option2'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3381,6 +4409,17 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3404,6 +4443,16 @@ class Profit extends CI_Controller
                                 ->where('store_id', $option['option3'])
                                 ->where('sell_date >=', $option['date_from'])
                                 ->where('sell_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('o.store_id', $option['option3'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
                             $data['_list_products'] = $this->db
@@ -3432,6 +4481,16 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('sale_id', $option['option4'])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3455,6 +4514,15 @@ class Profit extends CI_Controller
                                 ->where('sell_date <=', $option['date_to'])
                                 ->get()
                                 ->row_array();
+                            $return_money = $this->db
+                                ->select('sum(i.total_money) as return_money,sum(total_origin_price_return) as total_origin_price_return')
+                                ->from('input as i')
+                                ->join('orders as o', 'o.ID=i.order_id', 'INNER')
+                                ->where(['i.deleted' => 0, 'order_status' => 1])
+                                ->where('input_date >=', $option['date_from'])
+                                ->where('input_date <=', $option['date_to'])
+                                ->get()
+                                ->row_array();
                             $data['_list_products'] = $this->db
                                 ->select('product_id, sum(origin_price) as origin_price, prd_name, prd_code, sum(total_money) as total_money, sum(output) as total_quantity, sum(discount) as total_discount')
                                 ->from('report')
@@ -3473,7 +4541,9 @@ class Profit extends CI_Controller
                 }
             }
 
-            $config['base_url'] = 'cms_paging_revenue';
+            $total_orders['return_money'] = $return_money['return_money'];
+            $total_orders['total_origin_price'] -= $return_money['total_origin_price_return'];
+            $config['base_url'] = 'cms_paging_profit';
             $config['total_rows'] = $total_orders['quantity'];
             $config['per_page'] = 10;
             $this->pagination->initialize($config);

@@ -16,9 +16,9 @@
                             <button type="button" class="btn btn-primary" onclick="cms_vsell_order();"><i
                                     class="fa fa-desktop"></i> Bán hàng
                             </button>
-<!--                            <button type="button" class="btn btn-success"><i class="fa fa-download"></i> Xuất-->
-<!--                                Excel-->
-<!--                            </button>-->
+                       <button type="button" class="btn btn-success"><i class="fa fa-print"></i> Xuất
+                           Excel
+                      </button>
                         </div>
                     </div>
                 </div>
